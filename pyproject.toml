@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "kateryna"
-version = "1.0.2"
+version = "1.0.3"
 description = "Epistemic uncertainty layer for LLMs. Stop hallucinations. Let AI say 'I don't know.'"
 readme = "README.md"
 license = {text = "MIT"}

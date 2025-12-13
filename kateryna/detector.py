@@ -130,6 +130,8 @@ class EpistemicDetector:
     OVERCONFIDENCE_MARKERS = [
         r"\bdefinitely\b",
         r"\bcertainly\b",
+        r"\bcertainty\b",
+        r"\bcertain\b",
         r"\babsolutely\b",
         r"\balways\b",
         r"\bnever\b",
@@ -139,9 +141,11 @@ class EpistemicDetector:
         r"\bwithout a doubt\b",
         r"\bwithout doubt\b",
         r"\bguaranteed\b",
-        r"\b100%\b",
+        r"100\s?%",  # 100% or 100 %
         r"\bmust be\b",
         r"\bno question\b",
+        r"\bexactly\b",
+        r"\bprecisely\b",
     ]
 
     # Markers indicating the model is making things up
@@ -263,8 +267,21 @@ class EpistemicDetector:
             >>> state.is_danger_zone
             True
         """
-        text_lower = text.lower()
+        text_lower = text.lower().strip()
         markers_found = []
+
+        # === EMPTY/TRIVIAL RESPONSE CHECK ===
+        if len(text_lower) <= 3:
+            return EpistemicState(
+                state=TernaryState.UNCERTAIN,
+                confidence=0.0,
+                should_abstain=True,
+                reason="Response is empty or trivial",
+                markers_found=["empty_response"],
+                retrieval_confidence=retrieval_confidence,
+                chunks_found=chunks_found,
+                grounded=False
+            )
 
         # === LINGUISTIC ANALYSIS ===
 
@@ -333,9 +350,10 @@ class EpistemicDetector:
             markers_found.append("no_rag_context")
             grounded = False
 
-        # Priority 3: HIGH LINGUISTIC CONFIDENCE + WEAK RAG = DANGER ZONE (-1)
-        # This is THE critical insight. Confident bullshit.
-        elif rag_is_weak and linguistic_confidence > 0.7:
+        # Priority 3: OVERCONFIDENCE MARKERS + WEAK RAG = DANGER ZONE (-1)
+        # Even with hedging, if there are strong confidence markers + weak RAG, flag it
+        # This catches "I think it might definitely be 100% correct" patterns
+        elif rag_is_weak and overconfidence_count >= 1:
             state = TernaryState.OVERCONFIDENT
             confidence = retrieval_confidence
             reason = f"DANGER: Confident response without grounding (RAG: {retrieval_confidence:.0%})"
