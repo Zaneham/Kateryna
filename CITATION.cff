@@ -5,8 +5,8 @@ title: "Kateryna: Epistemic Uncertainty Layer for Large Language Models"
 authors:
   - family-names: "Hambly"
     given-names: "Zane"
-version: "1.0.0"
-date-released: 2025-01-01
+version: "1.0.1"
+date-released: 2025-12-13
 url: "https://github.com/Zaneham/kateryna"
 repository-code: "https://github.com/Zaneham/kateryna"
 license: MIT
