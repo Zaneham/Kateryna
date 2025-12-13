@@ -4,8 +4,11 @@
 
 Stop your LLMs from hallucinating. Let them say "I don't know."
 
-[![PyPI version](https://badge.fury.io/py/kateryna.svg)](https://badge.fury.io/py/kateryna)
+[![PyPI version](https://badge.fury.io/py/kateryna.svg)](https://pypi.org/project/kateryna/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docs](https://img.shields.io/badge/docs-kateryna--ai-blue)](https://kateryna-ai.netlify.app/)
+
+**[Documentation](https://kateryna-ai.netlify.app/)** | **[PyPI](https://pypi.org/project/kateryna/)** | **[GitHub](https://github.com/Zaneham/kateryna)**
 
 ---
 
