@@ -45,11 +45,12 @@ Quick Start:
     response = client.generate("What is quantum computing?")
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.4"
 __author__ = "Zane Hambly"
 
 from .state import EpistemicState, EpistemicResponse, TernaryState
 from .detector import EpistemicDetector, calculate_retrieval_confidence
+from .languages import available_languages, get_markers
 
 __all__ = [
     # Core
@@ -59,6 +60,9 @@ __all__ = [
     'EpistemicState',
     'EpistemicResponse',
     'TernaryState',
+    # Languages
+    'available_languages',
+    'get_markers',
     # Version
     '__version__',
 ]

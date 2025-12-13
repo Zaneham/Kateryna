@@ -2,22 +2,22 @@
 Kateryna Detector - Epistemic Uncertainty Detection for LLMs
 =============================================================
 
-Detects uncertainty in LLM responses and determines if the model
-should abstain rather than potentially hallucinate.
+Detects uncertainty in LLM responses and cross-references with RAG
+retrieval confidence to identify hallucination risk.
 
-Key insight: RAG confidence takes precedence. A confident-sounding
-response without grounding is the hallucination danger zone.
+Key insight: confident language + weak retrieval = danger zone.
 
-Named after Kateryna Yushchenko (1919-2001), Ukrainian computer scientist
-who invented indirect addressing (pointers) in 1955.
-
-DOI: 10.5281/zenodo.17875182
+References:
+    Brusentsov, N.P. (1960). An Electronic Calculating Machine Based on
+        Ternary Code. Doklady Akademii Nauk SSSR.
+    Lukasiewicz, J. (1920). On Three-Valued Logic. Ruch Filozoficzny.
 """
 
 import re
 from typing import Dict, Any, List, Optional, Tuple
 
 from .state import EpistemicState, TernaryState
+from .languages import get_markers, available_languages
 
 
 def calculate_retrieval_confidence(chunks: List[Dict[str, Any]]) -> Tuple[float, int]:
@@ -98,110 +98,52 @@ class EpistemicDetector:
         ... )
         >>> state.is_danger_zone
         True  # Confident response + weak grounding = hallucination risk
+
+        >>> # German language support
+        >>> detector_de = EpistemicDetector(language="de")
     """
-
-    # Markers indicating uncertainty (good - model is being honest)
-    UNCERTAINTY_MARKERS = [
-        r"\bi'?m not sure\b",
-        r"\bi don'?t know\b",
-        r"\bi think\b",
-        r"\bmaybe\b",
-        r"\bperhaps\b",
-        r"\bmight be\b",
-        r"\bcould be\b",
-        r"\bpossibly\b",
-        r"\buncertain\b",
-        r"\bnot certain\b",
-        r"\bi believe\b",
-        r"\bit seems\b",
-        r"\bprobably\b",
-        r"\blikely\b",
-        r"\bunlikely\b",
-        r"\bunclear\b",
-        r"\bif i recall\b",
-        r"\bif i remember\b",
-        r"\bnot entirely sure\b",
-        r"\bhard to say\b",
-        r"\bdifficult to determine\b",
-        r"\bappears to\b",
-    ]
-
-    # Markers indicating false confidence (potential hallucination)
-    OVERCONFIDENCE_MARKERS = [
-        r"\bdefinitely\b",
-        r"\bcertainly\b",
-        r"\bcertainty\b",
-        r"\bcertain\b",
-        r"\babsolutely\b",
-        r"\balways\b",
-        r"\bnever\b",
-        r"\bundoubtedly\b",
-        r"\bclearly\b",
-        r"\bobviously\b",
-        r"\bwithout a doubt\b",
-        r"\bwithout doubt\b",
-        r"\bguaranteed\b",
-        r"100\s?%",  # 100% or 100 %
-        r"\bmust be\b",
-        r"\bno question\b",
-        r"\bexactly\b",
-        r"\bprecisely\b",
-    ]
-
-    # Markers indicating the model is making things up
-    FABRICATION_MARKERS = [
-        r"as of my (last |knowledge )?cutoff",
-        r"i don'?t have access to",
-        r"i cannot browse",
-        r"my training data",
-        r"as an ai",
-        r"as a language model",
-        r"i cannot provide",
-        r"i don'?t have real-?time",
-    ]
-
-    # Question patterns that should trigger abstention
-    UNANSWERABLE_PATTERNS = [
-        r"what will .+ (be worth|be|happen|cost) in \d{4}",
-        r"worth in \d{4}",
-        r"who will win",
-        r"stock (price|market) .*(tomorrow|next|future|\d{4})",
-        r"\bpredict\b",
-        r"lottery",
-        r"(next|this) (week|month|year).*(will|going to)",
-        r"in \d{4}.*(will|be worth|cost)",
-    ]
 
     def __init__(
         self,
+        language: str = "en",
         threshold_confident: float = 0.7,
         threshold_uncertain: float = 0.3,
-        min_retrieval_confidence: float = 0.3
+        min_retrieval_confidence: float = 0.3,
+        custom_markers: Optional[Dict[str, List[str]]] = None,
     ):
         """
         Initialize the detector.
 
         Args:
+            language: Language code for markers ("en", "de", etc.)
             threshold_confident: RAG confidence above this = likely confident
             threshold_uncertain: RAG confidence below this = uncertain
             min_retrieval_confidence: Minimum RAG confidence to trust a response
+            custom_markers: Optional custom marker dict to override defaults
         """
+        self.language = language
         self.threshold_confident = threshold_confident
         self.threshold_uncertain = threshold_uncertain
         self.min_retrieval_confidence = min_retrieval_confidence
 
+        # Load markers from language pack or custom
+        if custom_markers:
+            markers = custom_markers
+        else:
+            markers = get_markers(language)
+
         # Compile regex patterns for performance
         self._uncertainty_patterns = [
-            re.compile(p, re.IGNORECASE) for p in self.UNCERTAINTY_MARKERS
+            re.compile(p, re.IGNORECASE) for p in markers.get("uncertainty", [])
         ]
         self._overconfidence_patterns = [
-            re.compile(p, re.IGNORECASE) for p in self.OVERCONFIDENCE_MARKERS
+            re.compile(p, re.IGNORECASE) for p in markers.get("overconfidence", [])
         ]
         self._fabrication_patterns = [
-            re.compile(p, re.IGNORECASE) for p in self.FABRICATION_MARKERS
+            re.compile(p, re.IGNORECASE) for p in markers.get("fabrication", [])
         ]
         self._unanswerable_patterns = [
-            re.compile(p, re.IGNORECASE) for p in self.UNANSWERABLE_PATTERNS
+            re.compile(p, re.IGNORECASE) for p in markers.get("unanswerable", [])
         ]
 
     def should_abstain_on_question(self, question: str) -> Tuple[bool, str]:

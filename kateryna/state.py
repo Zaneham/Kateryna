@@ -2,15 +2,20 @@
 Kateryna State - Ternary Logic for LLM Responses
 =================================================
 
+Balanced ternary epistemic states:
+    +1 = CONFIDENT (grounded in evidence)
+     0 = UNCERTAIN (abstain)
+    -1 = OVERCONFIDENT (potential hallucination)
+
 Named after Kateryna Yushchenko (1919-2001), Ukrainian computer scientist
-who invented indirect addressing (pointers) in 1955.
+who invented indirect addressing in 1955.
 
-Inspired by Brusentsov's Setun balanced ternary computer (1958):
-- +1 = confident (grounded in evidence)
--  0 = uncertain (abstain)
-- -1 = overconfident (potential hallucination)
-
-DOI: 10.5281/zenodo.17875182
+References:
+    Brusentsov, N.P. (1960). An Electronic Calculating Machine Based on
+        Ternary Code. Doklady Akademii Nauk SSSR.
+    Lukasiewicz, J. (1920). On Three-Valued Logic. Ruch Filozoficzny.
+    Kleene, S.C. (1938). On Notation for Ordinal Numbers. Journal of
+        Symbolic Logic.
 """
 
 from dataclasses import dataclass
