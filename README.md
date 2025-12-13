@@ -6,9 +6,9 @@ Stop your LLMs from hallucinating. Let them say "I don't know."
 
 [![PyPI version](https://img.shields.io/pypi/v/kateryna)](https://pypi.org/project/kateryna/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docs](https://img.shields.io/badge/docs-kateryna--ai-blue)](https://kateryna-ai.netlify.app/)
+[![Docs](https://img.shields.io/badge/docs-kateryna.ai-blue)](https://kateryna.ai/)
 
-**[Documentation](https://kateryna-ai.netlify.app/)** | **[PyPI](https://pypi.org/project/kateryna/)** | **[GitHub](https://github.com/Zaneham/kateryna)**
+**[Documentation](https://kateryna.ai/)** | **[PyPI](https://pypi.org/project/kateryna/)** | **[GitHub](https://github.com/Zaneham/kateryna)**
 
 ---
 
