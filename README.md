@@ -202,11 +202,29 @@ Her work on indirect addressing made modern programming possible. This work on e
 
 ---
 
-## Research Foundation
+## References
 
-- **Setun Computer (1958)** - Nikolai Brusentsov, Moscow State University
-- **Three-Valued Logic** - Jan Lukasiewicz (1920s)
-- **Ternary Inference** - DOI: 10.5281/zenodo.17875182
+### Ternary Logic & Computing
+
+- Lukasiewicz, J. (1920). O logice trojwartosciowej [On Three-Valued Logic]. *Ruch Filozoficzny*, 5, 170-171.
+- Brusentsov, N.P. (1960). Setun: A Ternary Computer. Moscow State University.
+
+### Linguistic Hedging & Epistemic Modality
+
+- Lakoff, G. (1973). Hedges: A Study in Meaning Criteria and the Logic of Fuzzy Concepts. *Journal of Philosophical Logic*, 2(4), 458-508. [DOI](https://doi.org/10.1007/BF00262952)
+- Hyland, K. (1998). *Hedging in Scientific Research Articles*. John Benjamins Publishing.
+- Holmes, J. (1988). Doubt and Certainty in ESL Textbooks. *Applied Linguistics*, 9(1), 21-44. [DOI](https://doi.org/10.1093/applin/9.1.21)
+- Palmer, F.R. (2001). *Mood and Modality* (2nd ed.). Cambridge University Press.
+- Nuyts, J. (2001). *Epistemic Modality, Language, and Conceptualization*. John Benjamins Publishing.
+
+### Overconfidence & Calibration
+
+- Moore, D.A. & Healy, P.J. (2008). The Trouble with Overconfidence. *Psychological Review*, 115(2), 502-517. [DOI](https://doi.org/10.1037/0033-295X.115.2.502)
+
+### LLM Hallucination & Calibration
+
+- Kadavath, S. et al. (2022). Language Models (Mostly) Know What They Know. [arXiv:2207.05221](https://arxiv.org/abs/2207.05221)
+- Ji, Z. et al. (2023). Survey of Hallucination in Natural Language Generation. *ACM Computing Surveys*, 55(12). [DOI](https://doi.org/10.1145/3571730)
 
 ---
 
